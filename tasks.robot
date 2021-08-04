@@ -3,6 +3,7 @@ Documentation   Template robot for sending POST Request to Telegram
 Library         RPA.Robocloud.Secrets
 Library         RPA.Notifier
 Library         RPA.HTTP
+Library         RPA.RobotLogListener
 
 
 *** Variables ***
@@ -19,6 +20,7 @@ Send Message to Telegram
     Notify Telegram    Text send from Robocorp Lab    ${chat_id}    ${token}[Token]
         
     # Using a post request, more complicated, but, if you want to use more features from telegram this template will work
-    Create Session    alias=Telegram    url=https://api.telegram.org   headers={"Content-Type": "application/json", "Host": "api.telegram.org"}     timeout=5    verify=${CURDIR}${/}telegram_certificate.pem
-    Post Request      alias=Telegram    uri=bot${token}[Token]/getMe
-    Post Request      alias=Telegram    uri=bot${token}[Token]/sendMessage    json=${data}
+    Create Session    alias=Telegram    url=https://api.telegram.org   headers={"Content-Type": "application/json", "Host": "api.telegram.org"} 
+    ...               timeout=5    verify=${CURDIR}${/}telegram_certificate.pem    #max_retries=3    backoff_factor=0.5
+    Post On Session    alias=Telegram    url=https://api.telegram.org/bot${token}[Token]/getMe
+    Post On Session    alias=Telegram    url=https://api.telegram.org/bot${token}[Token]/sendMessage    json=${data}
