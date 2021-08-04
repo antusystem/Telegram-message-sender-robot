@@ -14,6 +14,7 @@ ${text}       Here goes the message from post, sended from Robocorp Lab
 *** Tasks ***
 Send Message to Telegram
 
+    Register Protected Keywords    Post On Session
     ${token}=    Get Secret    Telegram
     
     # Using Notify is far more easier
@@ -21,6 +22,8 @@ Send Message to Telegram
         
     # Using a post request, more complicated, but, if you want to use more features from telegram this template will work
     Create Session    alias=Telegram    url=https://api.telegram.org   headers={"Content-Type": "application/json", "Host": "api.telegram.org"} 
-    ...               timeout=5    verify=${CURDIR}${/}telegram_certificate.pem    #max_retries=3    backoff_factor=0.5
+    ...               timeout=5    verify=${CURDIR}${/}telegram_certificate.pem    max_retries=3    backoff_factor=0.5
     Post On Session    alias=Telegram    url=https://api.telegram.org/bot${token}[Token]/getMe
     Post On Session    alias=Telegram    url=https://api.telegram.org/bot${token}[Token]/sendMessage    json=${data}
+
+
